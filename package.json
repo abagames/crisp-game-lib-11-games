@@ -1,0 +1,13 @@
+{
+  "name": "crisp-game-lib-11-games",
+  "version": "1.0.0",
+  "description": "Games made with crisp-game-lib v1.1",
+  "scripts": {
+    "watch_games": "light-server -s docs -w \"docs/**/* # # reload\""
+  },
+  "author": "abagames",
+  "license": "MIT",
+  "devDependencies": {
+    "light-server": "^2.9.1"
+  }
+}
