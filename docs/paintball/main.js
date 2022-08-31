@@ -82,7 +82,7 @@ function update() {
     if (waitingBall.pos.y > 95) {
       waitingBall.pos.y = 95;
     }
-    waitingBall.angle += waitingBall.va * difficulty * 0.02;
+    waitingBall.angle += waitingBall.va * sqrt(difficulty) * 0.02;
     if (
       (waitingBall.va < 0 && waitingBall.angle < -PI / 4) ||
       (waitingBall.va > 0 && waitingBall.angle > PI / 4)
