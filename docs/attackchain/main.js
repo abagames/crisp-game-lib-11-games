@@ -57,17 +57,19 @@ function update() {
   color("black");
   rect(0, 75, 100, 1);
   color("red");
-  barY += difficulty * 0.01;
-  rect(0, barY, 100, 1);
-  if (barY >= 75) {
+  barY += (difficulty + sqrt(multiplier)) * 0.002;
+  if (damageTicks <= 0 && totalDamageTicks <= 0 && barY >= 75) {
     play("explosion");
+    barY = 75;
     end();
   }
+  rect(0, barY, 100, 1);
   color("black");
   if (damageTicks <= 0 && totalDamageTicks <= 0 && input.isJustPressed) {
     const i = floor((input.pos.x - 0) / (100 / 6));
     if (i >= 0 && i < 6 && cards[i].isValid) {
       play("select");
+      barY += difficulty + sqrt(multiplier) * 0.05;
       const c = cards[i];
       c.isValid = false;
       if (turn === 0 && c.type === "red") {
@@ -122,8 +124,9 @@ function update() {
     if (totalDamageTicks <= 0) {
       play("click");
       addScore(totalDamage * multiplier);
-      if (totalDamage >= 100) {
-        barY -= (totalDamage - 100) / sqrt(multiplier);
+      if (totalDamage >= 115) {
+        barY -=
+          ((totalDamage - 115) * sqrt(totalDamage - 115)) / sqrt(multiplier);
       }
       if (barY < 0) {
         barY = 0;
@@ -178,7 +181,7 @@ function initCards() {
       type = rnd() < 0.5 ? "red" : "blue";
     }
     return {
-      v: floor(rndi(3, 7) * (4 + sqrt(multiplier))),
+      v: floor(rndi(3, 7) * (4 + sqrt(clamp(multiplier, 1, 20)))),
       type,
       isValid: true,
     };
