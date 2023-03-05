@@ -224,7 +224,6 @@ function update() {
     return;
   }
   if (input.isJustPressed) {
-    startTicks = 0;
     if (isNextRowSelected) {
       addNextRow();
     } else if (bx >= 0) {
@@ -244,15 +243,12 @@ function update() {
     }
   }
   startTicks--;
-  if (startTicks > 0 && startTicks % 40 < 30) {
-    drawLineRect(10, 7, 60, 40);
-    char("h", 40, 20);
-    char("g", 40, 30);
-    text("Tap", 35, 54);
-    drawLineRect(22, 60, 37, 12);
-    drawLineRect(10, 72, 60, 8);
-    char("g", 15, 75);
-    char("g", 65, 75);
+  if (startTicks > 0) {
+    text("Tap\nto", 3, 40);
+    text("rotate", 26, 30);
+    text("place", 26, 66);
+    text("add", 26, 76);
+    text("blo\ncks", 65, 40);
   }
 }
 
