@@ -122,11 +122,11 @@ function update() {
       if (g === 0) {
         return;
       }
-      const [px, py] = calcPixelPosition(x, y);
+      const p = calcPixelPosition(x, y);
       const vh = vGrid[x][y] > 0 ? vGrid[x][y] : hGrid[x][y];
       if (sGrid[x][y] || vh > 0) {
         color("yellow");
-        box(px, py, 6, 6);
+        box(p.x, p.y, 6, 6);
         color("black");
       }
       if (vh > 0) {
@@ -134,12 +134,12 @@ function update() {
           play("coin");
         } else if (vh < chainingIndex) {
           const cg = ((vh - 1) % 3) + 1;
-          char(addWithCharCode("a", cg - 1), px, py);
+          char(addWithCharCode("a", cg - 1), p.x, p.y);
         } else {
-          char(addWithCharCode("d", g - 1), px, py);
+          char(addWithCharCode("d", g - 1), p.x, p.y);
         }
       } else {
-        char(addWithCharCode("a", g - 1), px, py);
+        char(addWithCharCode("a", g - 1), p.x, p.y);
       }
     })
   );
@@ -179,17 +179,17 @@ function update() {
     const h = gridHeight[x];
     if (h < gridSize.y - 1) {
       hasPlace = true;
-      const [px, py] = calcPixelPosition(x, h + 1);
+      const p = calcPixelPosition(x, h + 1);
       const isSelected =
-        input.pos.x >= px - 3 &&
-        input.pos.x < px + 3 &&
-        input.pos.y >= py - 3 &&
-        input.pos.y < py + 9;
+        input.pos.x >= p.x - 3 &&
+        input.pos.x < p.x + 3 &&
+        input.pos.y >= p.y - 3 &&
+        input.pos.y < p.y + 9;
       blocks.forEach((b, i) => {
         if (!isSelected) {
           color("light_black");
         }
-        char(addWithCharCode("d", b - 1), px, py + i * 6);
+        char(addWithCharCode("d", b - 1), p.x, p.y + i * 6);
         color("black");
       });
       if (isSelected) {
@@ -212,11 +212,11 @@ function update() {
   rect(20, 80, 40, -nextRowTicks / 50);
   color("black");
   times(gridSize.x, (x) => {
-    const [px, py] = calcPixelPosition(x, -1);
+    const p = calcPixelPosition(x, -1);
     char(
       addWithCharCode(isNextRowSelected ? "a" : "d", nextRow[x] - 1),
-      px,
-      py
+      p.x,
+      p.y
     );
   });
   if (nextRowTicks > 400) {
@@ -361,8 +361,8 @@ function clearSequence() {
       if (sGrid[x][y]) {
         // @ts-ignore
         color(cs[grid[x][y]]);
-        const [px, py] = calcPixelPosition(x, y);
-        particle(px, py);
+        const p = calcPixelPosition(x, y);
+        particle(p.x, p.y);
         grid[x][y] = 0;
       }
     })
@@ -422,10 +422,14 @@ function addNextRow() {
   nextRowTicks = 0;
 }
 
+const pixelPos = vec();
+
 function calcPixelPosition(x, y) {
-  const px = 40 - (gridSize.x * 6) / 2 + x * 6 + 3;
-  const py = gridSize.y * 6 - y * 6 - 3;
-  return [px, py];
+  pixelPos.set(
+    40 - (gridSize.x * 6) / 2 + x * 6 + 3,
+    gridSize.y * 6 - y * 6 - 3
+  );
+  return pixelPos;
 }
 
 function drawLineRect(x, y, width, height) {
