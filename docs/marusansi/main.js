@@ -87,7 +87,6 @@ let blocks;
 /** @type {number[]} */
 let nextRow;
 let nextRowTicks;
-let nextX;
 let chainingTicks;
 let fallingTicks;
 let multiplier;
@@ -105,7 +104,6 @@ function update() {
     blocks = times(2, (i) => i + 1);
     nextRow = times(gridSize.x, () => 0);
     nextRowTicks = 0;
-    nextX = 0;
     calcGridHeight();
     setNextRow();
     chainingTicks = fallingTicks = 0;
@@ -182,17 +180,16 @@ function update() {
     if (h < gridSize.y - 1) {
       hasPlace = true;
       const [px, py] = calcPixelPosition(x, h + 1);
-      const isXSelected = input.pos.x >= px - 3 && input.pos.x < px + 3;
-      if (isXSelected) {
-        nextX = x;
-      }
       const isSelected =
-        isXSelected && input.pos.y >= py - 3 && input.pos.y < py + 9;
+        input.pos.x >= px - 3 &&
+        input.pos.x < px + 3 &&
+        input.pos.y >= py - 3 &&
+        input.pos.y < py + 9;
       blocks.forEach((b, i) => {
-        if (x !== nextX) {
+        if (!isSelected) {
           color("light_black");
         }
-        char(addWithCharCode(isSelected ? "a" : "d", b - 1), px, py + i * 6);
+        char(addWithCharCode("d", b - 1), px, py + i * 6);
         color("black");
       });
       if (isSelected) {
